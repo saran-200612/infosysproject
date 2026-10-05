@@ -3,7 +3,6 @@ package edu.infosys.inventoryApplication.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,6 @@ import edu.infosys.inventoryApplication.service.TransactionService;
 
 @RestController
 @RequestMapping("/invent/")
-@CrossOrigin(origins="http://localhost:3131",allowCredentials="true")
 public class TransactionController {
   @Autowired
    private TransactionDao transactionDao;
