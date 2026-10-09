@@ -1,6 +1,7 @@
 package edu.infosys.inventoryApplication.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,30 @@ public class LoginController {
         String encodedPassword = bCrypt.encode(user.getPassword());
         user.setPassword(encodedPassword);
         service.saveUser(user);
+    }
+
+    // Login with JSON body so special characters in passwords are handled safely.
+    @PostMapping("/authenticate")
+    public String authenticateUser(@RequestBody Map<String, String> credentials,
+                                  HttpServletRequest request) {
+        String userId = credentials.get("userId");
+        String password = credentials.get("password");
+        if (userId == null || password == null) {
+            return "false";
+        }
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userId, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            request.getSession(true).setAttribute(
+                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    SecurityContextHolder.getContext());
+            return service.getRole();
+        } catch (Exception ex) {
+            System.out.println("Login failed for supplied username: " + ex.getClass().getSimpleName());
+            return "false";
+        }
     }
 
     // 🔹 Login validation
