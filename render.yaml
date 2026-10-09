@@ -1,0 +1,51 @@
+databases:
+  - name: infosys-inventory-db
+    databaseName: inventorydb
+    user: inventoryapp
+    plan: free
+    region: singapore
+    postgresMajorVersion: "18"
+
+services:
+  - type: web
+    name: infosys-inventory-api
+    runtime: docker
+    repo: https://github.com/saran-200612/infosysproject
+    branch: master
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore
+    healthCheckPath: /invent/health
+    autoDeploy: true
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: infosys-inventory-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: infosys-inventory-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: infosys-inventory-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: infosys-inventory-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: infosys-inventory-db
+          property: password
+      - key: FRONTEND_ORIGIN
+        value: https://infosysprojectfrontend.vercel.app
+      - key: SESSION_COOKIE_SAMESITE
+        value: None
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: DDL_AUTO
+        value: update
+      - key: SHOW_SQL
+        value: "false"
