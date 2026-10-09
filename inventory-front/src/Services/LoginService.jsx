@@ -13,7 +13,7 @@ export const registerNewUser = (user) => {
 };
 
 export const validateUser = (userId, password) => {
-    return axios.get(`${LOGIN_URL}/${userId}/${password}`, {
+    return axios.post(`${BASE}/authenticate`, { userId, password }, {
         withCredentials: true
     });
 };
