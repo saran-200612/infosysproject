@@ -14,18 +14,37 @@ const RegisterUser = () => {
     });
     const [flag, setFlag] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [submitError, setSubmitError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     useEffect(() => {
         setFlag(false);
     }, []);
 
-    const createNewUser = (event) => {
+    const createNewUser = async (event) => {
         event.preventDefault();
-        if (inventoryUser.password === confirmPassword) {
-            registerNewUser(inventoryUser).then(() => {
-                setFlag(true);
-            });
+        setSubmitError("");
+        if (inventoryUser.password !== confirmPassword) {
+            setSubmitError("Passwords do not match.");
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            await registerNewUser(inventoryUser);
+            setFlag(true);
+        } catch (error) {
+            const status = error?.response?.status;
+            if (status === 409 || status === 400) {
+                setSubmitError("Registration was rejected. This username may already exist or some details are invalid.");
+            } else if (!error?.response) {
+                setSubmitError("Could not reach the server. Please wait a moment and try again.");
+            } else {
+                setSubmitError("Registration failed (HTTP " + status + "). Please try again.");
+            }
+            console.error("Registration request failed:", status || error?.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -279,6 +298,12 @@ const RegisterUser = () => {
                             </div>
 
                         </div>
+
+                        {submitError && (
+                            <div className="error-text" role="alert" style={{textAlign:'center', marginTop:'20px', fontSize:'14px'}}>
+                                ❌ {submitError}
+                            </div>
+                        )}
 
                         {flag && (
                             <div className="success-msg">
