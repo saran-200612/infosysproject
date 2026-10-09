@@ -25,19 +25,19 @@ services:
           property: host
       - key: DB_PORT
         fromDatabase:
-          name: infosys-inventory-db
+          name: infosys-inventory-db-blueprint
           property: port
       - key: DB_NAME
         fromDatabase:
-          name: infosys-inventory-db
+          name: infosys-inventory-db-blueprint
           property: database
       - key: DB_USERNAME
         fromDatabase:
-          name: infosys-inventory-db
+          name: infosys-inventory-db-blueprint
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: infosys-inventory-db
+          name: infosys-inventory-db-blueprint
           property: password
       - key: FRONTEND_ORIGIN
         value: https://infosysprojectfrontend.vercel.app
