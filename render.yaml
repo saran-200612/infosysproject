@@ -1,5 +1,5 @@
 databases:
-  - name: infosys-inventory-db
+  - name: infosys-inventory-db-blueprint
     databaseName: inventorydb
     user: inventoryapp
     plan: free
@@ -8,7 +8,7 @@ databases:
 
 services:
   - type: web
-    name: infosys-inventory-api
+    name: infosys-inventory-api-blueprint
     runtime: docker
     repo: https://github.com/saran-200612/infosysproject
     branch: master
@@ -21,7 +21,7 @@ services:
     envVars:
       - key: DB_HOST
         fromDatabase:
-          name: infosys-inventory-db
+          name: infosys-inventory-db-blueprint
           property: host
       - key: DB_PORT
         fromDatabase:
