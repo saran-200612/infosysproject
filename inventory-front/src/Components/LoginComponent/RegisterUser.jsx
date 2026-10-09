@@ -318,8 +318,8 @@ const RegisterUser = () => {
                             <button type="button" onClick={returnBack} className="cancel-btn">
                                 Cancel
                             </button>
-                            <button type="submit" className="login-btn">
-                                Submit Request
+                            <button type="submit" className="login-btn" disabled={isSubmitting}>
+                                {isSubmitting ? "Submitting..." : "Submit Request"}
                             </button>
                         </div>
                     </form>
